@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const port = 3008;
 
+app.use(express.json());
+
 const data = {
   entitlement_assignments: {
     bob: [
@@ -41,6 +43,21 @@ app.get('/data', (req, res) => {
 // get DATA_SOURCE_CONFIG for each client, based on JWT provided
 app.get('/configs', (req, res) => {
   res.send(configs[0]);
+});
+
+app.post('/add-entitlement', (req, res) => {
+  const newEntitlement = req.body;
+  Object.keys(newEntitlement).forEach((key) => {
+    if (data.entitlement_assignments[key]) {
+      data.entitlement_assignments[key] = [
+        ...data.entitlement_assignments[key],
+        ...newEntitlement[key],
+      ];
+    } else {
+      data.entitlement_assignments[key] = newEntitlement[key];
+    }
+  });
+  res.send({});
 });
 
 app.listen(port, () => {
