@@ -63,13 +63,20 @@ app.post('/add-entitlement', (req, res) => {
       data.entitlement_assignments[key] = newEntitlement[key];
     }
   });
-
   // here we will know from the request body what was changed
   // eg. Bob paid subscription for article with uid 123
 
   const dataForUpdatingOPACache = {};
 
   res.send({});
+});
+
+app.post('/update-entitlement/:id', (req, res) => {
+  console.log('usao');
+  const updatedValue = req.body;
+  const id = req.params.id;
+  data.entitlement_assignments[id] = updatedValue;
+  res.send(data.entitlement_assignments[id]);
 });
 
 app.listen(port, () => {
