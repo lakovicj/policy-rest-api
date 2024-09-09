@@ -45,7 +45,13 @@ app.get('/configs', (req, res) => {
   res.send(configs[0]);
 });
 
+app.get('/resource/:id', (req, res) => {
+  const id = req.params.id;
+  res.send(data.entitlement_assignments[id]);
+});
+
 app.post('/add-entitlement', (req, res) => {
+  // update subscriptions for example
   const newEntitlement = req.body;
   Object.keys(newEntitlement).forEach((key) => {
     if (data.entitlement_assignments[key]) {
@@ -57,6 +63,12 @@ app.post('/add-entitlement', (req, res) => {
       data.entitlement_assignments[key] = newEntitlement[key];
     }
   });
+
+  // here we will know from the request body what was changed
+  // eg. Bob paid subscription for article with uid 123
+
+  const dataForUpdatingOPACache = {};
+
   res.send({});
 });
 
